@@ -1,36 +1,37 @@
+proc = require 'child_process'
+path = require 'path'
 AtomBeanBuilderView = require './atom-bean-builder-view'
 {CompositeDisposable} = require 'atom'
 
+ARG_COMPILE_SCRIPT = path.join(__dirname, 'post_compile')
+ARG_BOARD = 'atmega328p'
+ARG_TOOLS = 'foo'
+ARG_PATH = __dirname
+ARG_FILE = 'test'
+POST_COMPILE_COMMAND = "#{ARG_COMPILE_SCRIPT} -board=#{ARG_BOARD} -tools=#{ARG_TOOLS} -path=#{ARG_PATH} -file=#{ARG_FILE}"
+
 module.exports = AtomBeanBuilder =
   atomBeanBuilderView: null
-  modalPanel: null
   subscriptions: null
 
   activate: (state) ->
-    console.log 'SUP BITCHES'
     @atomBeanBuilderView = new AtomBeanBuilderView(state.atomBeanBuilderViewState)
-    @modalPanel = atom.workspace.addModalPanel(item: @atomBeanBuilderView.getElement(), visible: false)
 
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
-    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-bean-builder:toggle': => @toggle()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-bean-builder:build': => @build()
 
   deactivate: ->
-    @modalPanel.destroy()
     @subscriptions.dispose()
     @atomBeanBuilderView.destroy()
 
   serialize: ->
     atomBeanBuilderViewState: @atomBeanBuilderView.serialize()
 
-  toggle: ->
-    console.log 'AtomBeanBuilder was toggled!'
+  build: ->
+    console.log 'Building Sketch!'
+    console.log POST_COMPILE_COMMAND
 
-    if @modalPanel.isVisible()
-      @modalPanel.hide()
-      console.log 'Hiding window'
-    else
-      console.log 'Showing window'
-      @modalPanel.show()
+    post_compile = proc.execSync(POST_COMPILE_COMMAND)
