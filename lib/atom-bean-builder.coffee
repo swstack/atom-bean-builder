@@ -1,5 +1,6 @@
 proc = require 'child_process'
 path = require 'path'
+BeanCloudCompilerClient = require './bcc-client'
 AtomBeanBuilderView = require './atom-bean-builder-view'
 {CompositeDisposable} = require 'atom'
 
@@ -20,8 +21,11 @@ module.exports = AtomBeanBuilder =
     # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
 
-    # Register command that toggles this view
+    # Register commands
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-bean-builder:build': => @build()
+
+    # Custom dependencies
+    @bccClient = new BeanCloudCompilerClient
 
   deactivate: ->
     @subscriptions.dispose()
@@ -31,7 +35,10 @@ module.exports = AtomBeanBuilder =
     atomBeanBuilderViewState: @atomBeanBuilderView.serialize()
 
   build: ->
-    console.log 'Building Sketch!'
-    console.log POST_COMPILE_COMMAND
+    console.log 'Building Sketch...'
+    editor = atom.workspace.getActivePaneItem()
+    file = editor?.buffer.file
+    console.log @bccClient
+    hex = @bccClient.compile(file.path)
 
     post_compile = proc.execSync(POST_COMPILE_COMMAND)
