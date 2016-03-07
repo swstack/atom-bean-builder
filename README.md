@@ -1,5 +1,7 @@
-# atom-bean-builder package
+# "Bean Builder" for Atom Editor
 
-A short description of your package.
+An Atom package that allows you to build Arduino sketches and upload them to the [Bean Loader](https://punchthrough.com/bean/guides/getting-started/os-x/).
 
-![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+## Motivation
+
+Coming.
