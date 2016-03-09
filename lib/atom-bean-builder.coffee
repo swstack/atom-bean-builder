@@ -12,7 +12,6 @@ ARG_PATH = __dirname
 ARG_FILE = 'test'
 POST_COMPILE_COMMAND = "#{ARG_COMPILE_SCRIPT} -board=#{ARG_BOARD} -tools=#{ARG_TOOLS} -path=#{ARG_PATH} -file=#{ARG_FILE}"
 
-
 module.exports = AtomBeanBuilder =
   atomBeanBuilderView: null
   subscriptions: null
@@ -40,5 +39,9 @@ module.exports = AtomBeanBuilder =
   build: ->
     editor = atom.workspace.getActivePaneItem()
     file = editor?.buffer.file
-    @bccClient.compile(file.path)
-    # post_compile = proc.execSync(POST_COMPILE_COMMAND)
+    @bccClient.compile file.path, (err, data) =>
+      if err
+        console.log "Problem with HTTP request: #{err}"
+      else
+        console.log "Sketch compiled successfully"
+        # proc.execSync(POST_COMPILE_COMMAND)

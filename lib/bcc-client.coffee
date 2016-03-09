@@ -9,18 +9,18 @@ class BeanCloudCompilerClient
   constructor: (config) ->
     @config = config
 
-  makeRequest: (data) ->
+  makeRequest: (data, callback) ->
     request.post(
       "#{@config.BCC_HOST}/1.0/compile",
       {form: data},
-      (err, resp, body)=>
-        console.log "GOT RESPONSE"
-        console.log err
-        console.log resp
-        console.log body
+      (err, resp, body) =>
+        if err || body.status != "success"
+          callback(err, null)
+        else
+          callback(null, body.program)
     )
 
-  compile: (sketchPath) ->
+  compile: (sketchPath, callback) ->
     console.log 'Compiling sketch %s', sketchPath
 
     reqInner =
@@ -42,4 +42,4 @@ class BeanCloudCompilerClient
       data: jsonInner
       hash: hash
 
-    @makeRequest(reqOuter)
+    @makeRequest(reqOuter, callback)
