@@ -13,15 +13,19 @@ class BeanCloudCompilerClient
     request.post(
       "#{@config.BCC_HOST}/1.0/compile",
       {form: data},
-      (err, resp, body) =>
-        if err || body.status != "success"
+      (err, resp, rawBody) =>
+        if err
           callback(err, null)
         else
-          callback(null, body.program)
+          body = JSON.parse(rawBody)
+          if body.status != 'success'
+            callback(body.message_debug, null)
+          else
+            callback(null, body.program)
     )
 
   compile: (sketchPath, callback) ->
-    console.log 'Compiling sketch %s', sketchPath
+    console.log "Compiling sketch #{sketchPath}"
 
     reqInner =
       api_key: @config.BCC_KEY
