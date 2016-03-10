@@ -15,22 +15,23 @@ module.exports =
 
 class PostCompile
 
-  @execute: (sketchHex) ->
+  @execute: (sketch, sketchHex) ->
     # Call this after the BCC compile is successful
 
     console.log "Executing post compile step..."
 
-    temp.open 'bcc-tmp', (err, info) =>
+    temp.mkdir 'bcc-tmp', (err, dirPath) =>
       if err
-        console.log "Failed to open temp file: #{err}"
+        console.log "Failed to open temp dir: #{err}"
       else
-        fs.write info.fd, sketchHex
-        fs.close info.fd, (err) =>
+        console.log "Opened temp dir..."
+        inputPath =  path.join(dirPath, sketch.base)
+        fs.writeFile inputPath, sketchHex, (err)=>
           if err
-            console.log "Failed to close file: #{err}"
+            console.log "Writing temp file failed: #{err}"
           else
-            console.log "Here!!!"
-            tmpSketch = path.parse(info.path)
-            console.log "#{path}"
-            cmd = "#{ARG_COMPILE_SCRIPT} -board=#{ARG_BOARD} -tools=#{ARG_TOOLS} -path=#{tmpSketch.dir} -file=#{tmpSketch.base}"
+            console.log "Spawning child process..."
+            tmpSketch = path.parse(inputPath)
+            console.log "Saved temp sketch file: #{tmpSketch.dir}/#{tmpSketch.base}"
+            cmd = "#{ARG_COMPILE_SCRIPT} -board=#{ARG_BOARD} -tools=#{ARG_TOOLS} -path=#{tmpSketch.dir} -file=#{tmpSketch.name}"
             proc.execSync(cmd)

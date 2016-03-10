@@ -1,4 +1,3 @@
-proc = require 'child_process'
 path = require 'path'
 fs = require 'fs'
 BeanCloudCompilerClient = require './bcc-client'
@@ -34,9 +33,11 @@ module.exports = AtomBeanBuilder =
   build: ->
     editor = atom.workspace.getActivePaneItem()
     file = editor?.buffer.file
-    @bccClient.compile file.path, (err, sketchHex) =>
+    @bccClient.compile file.path, (err, rawHex) =>
       if err
         console.log "BCC Error: #{err}"
       else
         console.log "Sketch compiled successfully"
-        PostCompile.execute sketchHex
+        pathObj = path.parse(file.path)
+        # hexBuffer = new Buffer(rawHex, 'utf8')
+        PostCompile.execute pathObj, rawHex
