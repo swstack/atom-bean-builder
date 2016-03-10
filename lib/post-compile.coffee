@@ -9,8 +9,6 @@ ARG_TOOLS = 'foo'
 ARG_PATH = __dirname
 ARG_FILE = 'test'
 
-temp.track()
-
 module.exports =
 
 class PostCompile
@@ -19,6 +17,8 @@ class PostCompile
     # Call this after the BCC compile is successful
 
     console.log "Executing post compile step..."
+
+    temp.cleanupSync()
 
     temp.mkdir 'bcc-tmp', (err, dirPath) =>
       if err
