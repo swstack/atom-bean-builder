@@ -1,43 +1,45 @@
 fs = require('fs')
-
-###
-{
-    'data':
-      {
-        'api_key': key,
-        'app_version': '0.0.1',
-        'code': sketch_data,
-        'opt_out': 0,
-        'os_version': os_version,
-        'request_timestamp': int(time()),  # Unix
-        'unique_id': 'SOME_UNIQUE_TEST_ID'
-      }
-
-    'hash':
-      hmac.new(secret, inner_json.encode('utf-8'), sha512.hexdigest()
-}
-###
+request = require('request')
+crypto = require('crypto')
+utf8 = require('utf8')
 
 module.exports =
+
 class BeanCloudCompilerClient
-  constructor: () ->
-    @url = ''
+  constructor: (config) ->
+    @config = config
+
+  makeRequest: (data) ->
+    request.post(
+      "#{@config.BCC_HOST}/1.0/compile",
+      {form: data},
+      (err, resp, body)=>
+        console.log "GOT RESPONSE"
+        console.log err
+        console.log resp
+        console.log body
+    )
 
   compile: (sketchPath) ->
     console.log 'Compiling sketch %s', sketchPath
-    # buf = new buffer.Buffer()
-    # sketch = fs.openSync(filepath, 'r')
-    sketchRaw = fs.readFileSync(sketchPath)
 
     reqInner =
-      api_key: ''
-      app_version: ''
-      code: sketchRaw
+      api_key: @config.BCC_KEY
+      app_version: '0.0.1'
+      code: fs.readFileSync(sketchPath, 'utf8')
       opt_out: 0
       os_version: 'OS X'
-      request_timestamp: ''
+      request_timestamp: Math.floor(Date.now() / 1000)
       unique_id: ''
 
+    jsonInner = JSON.stringify(reqInner)
+
+    hmac = crypto.createHmac('sha512', @config.BCC_SECRET)
+    hmac.update(jsonInner)
+    hash = hmac.digest('hex')
+
     reqOuter =
-      data: reqInner
-      hash: ''
+      data: jsonInner
+      hash: hash
+
+    @makeRequest(reqOuter)

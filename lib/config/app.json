@@ -1,5 +1,5 @@
 {
-  "BCC_HOST": "",
+  "BCC_HOST": "http://compile.prod.ptdapp.com",
   "BCC_KEY": "",
   "BCC_SECRET": ""
 }
