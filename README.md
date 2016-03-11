@@ -1,5 +1,7 @@
 # "Bean Builder" for Atom Editor
 
+**NOTE: This is not released yet, should be out by March 20th**
+
 The "Bean Builder" is an [Atom](https://atom.io/) package that allows you to build Arduino sketches for the [LightBlue Bean](https://punchthrough.com/bean/) and upload them to the [Bean Loader application](https://punchthrough.com/bean/guides/getting-started/os-x/).
 
 ### Motivation
