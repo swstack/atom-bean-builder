@@ -24,7 +24,7 @@ This package adds a command to the [Atom command palette](https://github.com/ato
 2. Type "Bean Build" into the command palette (`cmd-shift-p`)
 3. Observe that the sketch is "Available" in Bean Loader
 
-![](resources/build-flow.png)
+![](https://github.com/swstack/atom-bean-builder/blob/master/resources/build-flow.png)
 
 # Features and Roadmap
 
