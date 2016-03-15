@@ -1,7 +1,7 @@
 {
   "name": "atom-bean-builder",
   "main": "./lib/atom-bean-builder",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Build Arduino sketches targeted for the LightBlue Bean",
   "keywords": [
     "arduino",
