@@ -3,7 +3,8 @@ proc = require 'child_process'
 temp = require 'temp'
 fs = require 'fs'
 
-ARG_COMPILE_SCRIPT = path.join(__dirname, 'post_compile')
+# ARG_COMPILE_SCRIPT = path.join(__dirname, 'post_compile')
+ARG_COMPILE_SCRIPT = '/Applications/Arduino.app/Contents/Java/hardware/tools/bean/post_compile'
 ARG_BOARD = 'atmega328p'
 ARG_TOOLS = 'unused'
 ARG_PATH = __dirname
