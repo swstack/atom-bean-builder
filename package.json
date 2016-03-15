@@ -2,12 +2,17 @@
   "name": "atom-bean-builder",
   "main": "./lib/atom-bean-builder",
   "version": "0.0.0",
-  "description": "A short description of your package",
-  "keywords": [],
+  "description": "Build Arduino sketches targeted for the LightBlue Bean",
+  "keywords": [
+    "arduino",
+    "lightblue",
+    "bean",
+    "punchthrough"
+  ],
   "activationCommands": {
     "atom-workspace": "atom-bean-builder:build"
   },
-  "repository": "https://github.com/atom/atom-bean-builder",
+  "repository": "https://github.com/swstack/atom-bean-builder",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
